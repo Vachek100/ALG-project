@@ -41,22 +41,23 @@ struct node* create(struct node* head){
     cin >> n;
 
     for(int i = 0; i < n; i++){
-        cout << "Enter the coefficient for term", i+1, ": ";
+        cout << "Enter the coefficient for term " << i+1 << ": ";
         cin >> coeff; 
 
-        cout << "Enter the exponent for term", i+1, ": ";
+        cout << "Enter the exponent for term " << i+1 << ": ";
         cin >> expo;
         head = insert(head, coeff, expo);
     }
+    return head;
 }
 
 void print(struct node* head){
     if(head == NULL){
-        cout << "No Polynomial\n";
+        cout << "No Polynomial.\n";
     }else{
         struct node* temp = head;
         while(temp != NULL){
-            cout << temp->coefficient << "x^" << temp->exponent;
+            cout << "(" <<temp->coefficient << "x^" << temp->exponent << ")";
             temp = temp->link;
             if(temp != NULL){
                 cout << " + ";
