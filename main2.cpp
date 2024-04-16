@@ -13,7 +13,7 @@ void create(vector<double>& A){
     A.resize(n);
 
     for(int i = 0; i < n; i++){
-        cout << "Enter the coefficient for term " << i + 1 << ": ";
+        cout << "Enter the coefficient for term " << i << ": ";
         cin >> coeff; 
         A[i] = coeff;
     }
