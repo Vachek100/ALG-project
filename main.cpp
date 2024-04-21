@@ -68,10 +68,44 @@ void print(struct node* head){
     }
 }
 
+void polyAdd(struct node* head1, struct node* head2){
+    struct node* ptr1 = head1;
+    struct node* ptr2 = head2;
+    struct node* head3 = NULL;
+    while(ptr1 != NULL && ptr2 != NULL){
+        if(ptr1->exponent == ptr2->exponent){
+        head3 = insert(head3, ptr1->coefficient + ptr2->coefficient, ptr1->exponent);
+        ptr1 = ptr1->link;
+        ptr2 = ptr2->link;
+        } else if(ptr1->exponent > ptr2->exponent){
+        head3 = insert(head3, ptr1->coefficient, ptr1->exponent);
+        ptr1 = ptr1->link;
+        } else if(ptr1->exponent < ptr2->exponent){
+            head3 = insert(head3, ptr2->coefficient, ptr2->exponent);
+            ptr2 = ptr2->link;
+        }
+    }
+    while(ptr1 != NULL){
+        head3 = insert(head3, ptr1->coefficient, ptr1->exponent);
+        ptr1 = ptr1->link;
+    }
+    while(ptr2 != NULL){
+        head3 = insert(head3, ptr2->coefficient, ptr2->exponent);
+        ptr2 = ptr2->link;
+    }
+    cout << "Added polynomial is: ";
+    print(head3);
+}
+
 int main(){
-    struct node* head = NULL; // head of the linked list
-    cout << "Enter the polynomial:\n";
-    head = create(head);
-    print(head);
+    struct node* head1 = NULL; // head of the linked list
+    struct node* head2 = NULL; // head of the linked list
+    cout << "Enter the first polynomial:\n";
+    head1 = create(head1);
+    cout << "Enter the second polynomial:\n";
+    head2 = create(head2);
+
+
+    polyAdd(head1, head2);
     return 0;
 }
