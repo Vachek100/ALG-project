@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include "functions.cpp"
+#include "functions.h"
 
 using namespace std;
 
