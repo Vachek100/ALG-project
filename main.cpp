@@ -1,7 +1,10 @@
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 using namespace std;
+
+
 
 void create(vector<double>& A){
     int n; //variable to store number of terms in the polynomial
@@ -10,27 +13,54 @@ void create(vector<double>& A){
     cout << "Enter the number of terms: ";
     cin >> n;
 
-    A.resize(n);
+    if(n == 1) {
+        cout << "Enter the coefficient for the zero polynomial: ";
+        cin >> coeff;
+        A.push_back(coeff);
+    } else {
+        A.resize(n);
 
-    for(int i = 0; i < n; i++){
-        cout << "Enter the coefficient for term " << i << ": ";
-        cin >> coeff; 
-        A[i] = coeff;
+        for(int i = 0; i < n; i++){
+            cout << "Enter the coefficient for term " << i << ": ";
+            cin >> coeff; 
+            A[i] = coeff;
+        }
     }
 }
 
+void createPolynomialFromSingleNumber(vector<double>& polynomial, double coeff) {
+    polynomial.clear(); // Clear the existing polynomial
+    polynomial.push_back(coeff); // Add the coefficient to the polynomial
+}
+
 void print(const vector<double>& A){
-    if(A.empty()){
-        cout << "No Polynomial.\n";
-    }else{
-        for(int i = A.size() - 1; i >= 0; --i){
+    int n = A.size();
+
+    if(n == 1) {
+        cout << "P(x) = " << A[0] << "\n";
+    } else {
+        cout << "P(x) = ";
+
+        for(int i = n - 1; i >= 0; i--){
             if(A[i] != 0){
-                cout << A[i] << "x^" << i;
-                if(i > 0){
+                if(i != n - 1 && A[i] > 0)
                     cout << " + ";
-                }
+                else if(i != n - 1 && A[i] < 0)
+                    cout << " - ";
+                else if(i == n - 1 && A[i] < 0)
+                    cout << "-";
+
+                if(abs(A[i]) != 1 || i == 0)
+                    cout << abs(A[i]);
+
+                if(i > 0)
+                    cout << "x";
+
+                if(i > 1)
+                    cout << "^" << i;
             }
         }
+
         cout << "\n";
     }
 }
@@ -138,73 +168,59 @@ int main(){
     vector<double> A; // First polynomial
     vector<double> B; // Second polynomial
     vector<double> C; // Resulting polynomial
+    double x0;
+    double value;
 
     while(true){
         cout << "What do you want to do?\n";
-        cout << "1. Show polynomial/polynomials\n";
+        cout << "1. Create polynomial\n";
         cout << "2. Add polynomials together\n";
         cout << "3. Subtract polynomials\n";
         cout << "4. Multiply polynomials\n";
         cout << "5. Derive a polynomial\n";
         cout << "6. Evaluate a polynomial at a given point\n";
-        cout << "7. Exit\n";
+        cout << "7. Find the degree of a polynomial\n";
+        cout << "8. Exit\n";
         cin >> choice;
 
-        double x0;
-        double value;
 
         switch(choice){
             case 1:
-                int showChoice;
-                cout << "Do you want to show:\n";
-                cout << "1. One polynomial\n";
-                cout << "2. Two polynomials\n";
-                cout << "3. All showed polynomials\n";
-                cin >> showChoice;
+                int subchoice;
+                cout << "How do you want to create the polynomial?\n";
+                cout << "1. Create a polynomial\n";
+                cout << "2. Create a polynomial from a single number\n";
+                cin >> subchoice;
 
-                switch(showChoice){
-                    case 1:
-                        cout << "Enter the polynomial:\n";
-                        create(A);
-                        print(A);
-                        cout << "\n";
-                        polynomials.push_back(A);
-                        break;
-                    case 2:
-                        cout << "Enter the first polynomial:\n";
-                        create(A);
-                        print(A);
-                        cout << "\n";
-                        polynomials.push_back(A);
-                        cout << "Enter the second polynomial:\n";
-                        create(B);
-                        print(B);
-                        cout << "\n";
-                        polynomials.push_back(B);
-                        break;
-                    case 3:
-                        for(const auto& polynomial : polynomials){
-                            print(polynomial);
-                        }
-                            cout << "\n";
-                        break;
-                    default:
-                        cout << "Invalid choice.\n";
-                        break;
+                if(subchoice == 1) {
+                    cout << "Enter the polynomial:\n";
+                    create(A);
+                    print(A);
+                    cout << "\n";
+                } else if(subchoice == 2) {
+                    double coeff;
+                    cout << "Enter the coefficient for the zero polynomial: ";
+                    cin >> coeff;
+                    createPolynomialFromSingleNumber(A, coeff);
+                    print(A);
+                    cout << "\n";
+                } else {
+                    cout << "Invalid choice\n";
                 }
+
                 break;
             case 2:
                 cout << "Enter the first polynomial:\n";
                 create(A);
                 print(A);
                 cout << "\n";
-                polynomials.push_back(A);
+                
 
                 cout << "Enter the second polynomial:\n";
                 create(B);
                 print(B);
                 cout << "\n";
-                polynomials.push_back(B);
+                
 
                 // Add the polynomials
                 C = addPolynomials(A, B);
@@ -212,7 +228,7 @@ int main(){
                 cout << "The sum of the polynomials is:\n";
                 print(C);
                 cout << "\n";
-                polynomials.push_back(C);
+                
 
                 break;
             case 3:
@@ -220,13 +236,13 @@ int main(){
                 create(A);
                 print(A);
                 cout << "\n";
-                polynomials.push_back(A);
+                
 
                 cout << "Enter the second polynomial:\n";
                 create(B);
                 print(B);
                 cout << "\n";
-                polynomials.push_back(B);
+                
 
                 // Subtract the polynomials
                 C = subtractPolynomials(A, B);
@@ -234,7 +250,7 @@ int main(){
                 cout << "The difference of the polynomials is:\n";
                 print(C);
                 cout << "\n";
-                polynomials.push_back(C);
+                
 
                 break;
             case 4:
@@ -242,13 +258,13 @@ int main(){
                 create(A);
                 print(A);
                 cout << "\n";
-                polynomials.push_back(A);
+                
 
                 cout << "Enter the second polynomial:\n";
                 create(B);
                 print(B);
                 cout << "\n";
-                polynomials.push_back(B);
+                
 
                 // Multiply the polynomials
                 C = multiplyPolynomials(A, B);
@@ -256,7 +272,7 @@ int main(){
                 cout << "The product of the polynomials is:\n";
                 print(C);
                 cout << "\n";
-                polynomials.push_back(C);
+                
 
                 break;
             case 5:
@@ -264,7 +280,7 @@ int main(){
                 create(A);
                 print(A);
                 cout << "\n";
-                polynomials.push_back(A);
+                
 
                 // Derive the polynomial
                 B = derivePolynomial(A);
@@ -272,7 +288,7 @@ int main(){
                 cout << "The derivative of the polynomial is:\n";
                 print(B);
                 cout << "\n";
-                polynomials.push_back(B);
+                
 
                 break;
             case 6:
@@ -280,7 +296,7 @@ int main(){
                 create(A);
                 print(A);
                 cout << "\n";
-                polynomials.push_back(A);
+                
 
                 cout << "Enter the point to evaluate the polynomial at:\n";
                 cin >> x0;
@@ -292,6 +308,17 @@ int main(){
 
                 break;
             case 7:
+            {
+                cout << "Enter the polynomial:\n";
+                create(A);
+                print(A);
+                cout << "\n";
+                int degree = A.size() - 1;
+                cout << "The degree of the polynomial is: " << degree << "\n";
+                cout << "\n";
+                break;
+            }
+            case 8:
                 cout << "Goodbye and see you again!!!\n";
                 return 0;
             default:
