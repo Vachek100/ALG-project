@@ -1,2 +1,2 @@
 # ALG-project
-Just for thing with polynomials.
+Just for doing things with polynomials.
